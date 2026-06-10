@@ -6,6 +6,12 @@ class DataSourceException(Exception):
     All exceptions related to database connectivity or query execution should inherit from this class.
     """
 
+    def __init__(
+        self, message: str, original_exception: Exception | None = None
+    ) -> None:
+        super().__init__(message)
+        self.original_exception = original_exception
+
 
 class QueryExecutionException(DataSourceException):
     """Exception raised for errors during query execution.
@@ -15,8 +21,10 @@ class QueryExecutionException(DataSourceException):
     def __init__(
         self, message: str, original_exception: Exception | None = None
     ) -> None:
-        super().__init__(message)
-        self.original_exception = original_exception
+        super().__init__(
+            message=message,
+            original_exception=original_exception,
+        )
 
 
 class TransactionException(DataSourceException):
@@ -27,5 +35,7 @@ class TransactionException(DataSourceException):
     def __init__(
         self, message: str, original_exception: Exception | None = None
     ) -> None:
-        super().__init__(message)
-        self.original_exception = original_exception
+        super().__init__(
+            message=message,
+            original_exception=original_exception,
+        )

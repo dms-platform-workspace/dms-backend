@@ -1,0 +1,14 @@
+[project]
+name = "dms-backend"
+version = "0.1.0"
+description = "Enterprise-grade backend for a Delivery Management System (DMS) built with FastAPI, utilizing a uv workspace monorepo, Domain-Driven Design (DDD), CQRS, and Functional Error Handling."
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = []
+
+[tool.uv.workspace]
+members = [
+    "apps/public_api",
+    "packages/api_kit",
+    "packages/core/foundation",
+]

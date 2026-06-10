@@ -1,12 +1,12 @@
 # packages/core/database/src/database/interfaces.py
 
 from abc import ABC, abstractmethod
-from typing import TypeVar
+from typing import Generic, TypeVar
 
 T = TypeVar("T")
 
 
-class DataSource(ABC):
+class DataSource(ABC, Generic[T]):
     @abstractmethod
     async def add(self, record: T) -> None: ...
 

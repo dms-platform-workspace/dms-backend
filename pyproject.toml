@@ -11,4 +11,5 @@ members = [
     "apps/public_api",
     "packages/api_kit",
     "packages/core/foundation",
+    "packages/core/database",
 ]

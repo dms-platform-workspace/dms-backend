@@ -5,6 +5,7 @@ from contextlib import asynccontextmanager
 from typing import AsyncIterator
 
 from api_kit.http import ErrorResponseDto
+from database.connection import create_db_engine, create_session_factory
 from fastapi import FastAPI, Request, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import HTMLResponse, JSONResponse
@@ -18,9 +19,17 @@ logger = logging.getLogger(__name__)
 @asynccontextmanager
 async def lifespan_handler(app: FastAPI) -> AsyncIterator[None]:
     print(Panel("Application is starting", title="LIFE CYCLE", border_style="green"))
+
+    # TODO! Get it using config/env in future
+    db_url = "sqlite+aiosqlite:///./test.db"
+
+    engine = create_db_engine(db_url, echo=True)
+    session_factory = create_session_factory(engine)
+
     try:
         yield
     finally:
+        await engine.dispose()
         print(
             Panel(
                 "Application is shutting down", title="LIFE CYCLE", border_style="red"

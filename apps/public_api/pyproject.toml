@@ -6,7 +6,11 @@ readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
     "foundation",
+    "api_kit",
+    "fastapi[standard]>=0.136.3",
+    "scalar-fastapi>=1.8.2",
 ]
 
 [tool.uv.sources]
 foundation = { workspace = true }
+api_kit = { workspace = true }

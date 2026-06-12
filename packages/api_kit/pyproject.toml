@@ -1,7 +1,7 @@
 [project]
 name = "api-kit"
 version = "0.1.0"
-description = "Add your description here"
+description = "Standard API components and response schemas"
 readme = "README.md"
 authors = [
     { name = "unxcoder", email = "bqr.ho3ein@gmail.com" }

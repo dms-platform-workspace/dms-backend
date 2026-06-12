@@ -1,7 +1,7 @@
 [project]
 name = "foundation"
 version = "0.1.0"
-description = "Add your description here"
+description = "Core utilities and base domain primitives"
 readme = "README.md"
 authors = [
     { name = "unxcoder", email = "bqr.ho3ein@gmail.com" }

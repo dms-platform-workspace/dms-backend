@@ -1,6 +1,4 @@
-# apps/public_api/containers.py
-
-# apps/public_api/containers.py
+# apps/public_api/core/dependency_injector.py
 
 from database.connection import create_db_engine, create_session_factory
 from dependency_injector import containers, providers

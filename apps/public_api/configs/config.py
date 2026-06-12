@@ -1,12 +1,9 @@
-# apps/public_api/settings.py
+# apps/public_api/configs/config.py
 
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-
-class DatabaseSettings(BaseSettings):
-    url: str = Field(default="sqlite+aiosqlite:///./test.db")
-    echo: bool = Field(default=False)
+from .database_settings import DatabaseSettings
 
 
 class AppSettings(BaseSettings):

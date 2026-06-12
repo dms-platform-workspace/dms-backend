@@ -427,6 +427,7 @@ version = "0.1.0"
 source = { virtual = "apps/public_api" }
 dependencies = [
     { name = "api-kit" },
+    { name = "database" },
     { name = "fastapi", extra = ["standard"] },
     { name = "foundation" },
     { name = "scalar-fastapi" },
@@ -435,6 +436,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "api-kit", editable = "packages/api_kit" },
+    { name = "database", editable = "packages/core/database" },
     { name = "fastapi", extras = ["standard"], specifier = ">=0.136.3" },
     { name = "foundation", editable = "packages/core/foundation" },
     { name = "scalar-fastapi", specifier = ">=1.8.2" },

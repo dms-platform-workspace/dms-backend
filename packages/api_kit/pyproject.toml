@@ -7,7 +7,10 @@ authors = [
     { name = "unxcoder", email = "bqr.ho3ein@gmail.com" }
 ]
 requires-python = ">=3.14"
-dependencies = []
+dependencies = [
+    "pydantic>=2.13.4",
+    "returns>=0.28.0",
+]
 
 [build-system]
 requires = ["uv_build>=0.11.19,<0.12.0"]

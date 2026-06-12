@@ -9,7 +9,8 @@ dependencies = [
     "api_kit",
     "fastapi[standard]>=0.136.3",
     "scalar-fastapi>=1.8.2",
-    "database"
+    "database",
+    "dependency-injector>=4.49.0",
 ]
 
 [tool.uv.sources]

@@ -5,31 +5,62 @@ from contextlib import asynccontextmanager
 from typing import AsyncIterator
 
 from api_kit.http import ErrorResponseDto
-from database.connection import create_db_engine, create_session_factory
 from fastapi import FastAPI, Request, status
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import HTMLResponse, JSONResponse
 from rich.panel import Panel
 from scalar_fastapi import get_scalar_api_reference
 
+from .containers import AppContainer
+from .settings import settings
+
 # Configure a basic logger (in production, use a structured logger or APM like Sentry)
 logger = logging.getLogger(__name__)
+
+# Initialize the global DI container
+container = AppContainer()
+
+
+# Inject Pydantic settings into the container configuration
+container.config.from_pydantic(settings)
+
+
+class DMSFastAPI(FastAPI):
+    """
+    Custom FastAPI application class for the DMS project to ensure 100% Type-Safety.
+
+    DI Usage Rules in our Architecture:
+    -----------------------------------
+    1. When to use `Depends(Provide[...])`:
+       - ONLY inside API Route handlers (Endpoints).
+       - This is the standard, clean way to inject dependencies directly into
+         the request execution scope without knowing about the framework's state.
+
+    2. When to use `app.container` (or `request.app.container`):
+       - In Middlewares.
+       - In Exception Handlers.
+       - In Lifespan events.
+       - Use this ONLY when FastAPI's `Depends` system is physically unavailable
+         because you are outside the context of a routed endpoint.
+    """
+
+    container: AppContainer
 
 
 @asynccontextmanager
 async def lifespan_handler(app: FastAPI) -> AsyncIterator[None]:
     print(Panel("Application is starting", title="LIFE CYCLE", border_style="green"))
 
-    # TODO! Get it using config/env in future
-    db_url = "sqlite+aiosqlite:///./test.db"
-
-    engine = create_db_engine(db_url, echo=True)
-    session_factory = create_session_factory(engine)
+    # Ensure resources (like DB Engine) are initialized
+    container.init_resources()
 
     try:
         yield
     finally:
-        await engine.dispose()
+        # Retrieve the engine and safely dispose the database connection pool
+        db_engine = container.db_engine()
+        await db_engine.dispose()
+
         print(
             Panel(
                 "Application is shutting down", title="LIFE CYCLE", border_style="red"
@@ -37,8 +68,13 @@ async def lifespan_handler(app: FastAPI) -> AsyncIterator[None]:
         )
 
 
-def create_app() -> FastAPI:
-    app = FastAPI(title="DMS", lifespan=lifespan_handler)
+def create_app() -> DMSFastAPI:
+    app = DMSFastAPI(title=settings.app_name, lifespan=lifespan_handler)
+
+    # Attach the container to the custom FastAPI application instance.
+    # Type checkers (MyPy/Pylance) are now happy because DMSFastAPI explicitly declares this attribute.
+    app.container = container
+
     return app
 
 
